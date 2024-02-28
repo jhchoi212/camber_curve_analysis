@@ -7,5 +7,5 @@ The inputs are the:
 * LCA Mounts (x, y). Origin
 * LCA Sweep (lower:step:upper). [deg]
 * UCA Length [in]
-* UCA Mounts (x, y). Origin
+* UCA Mounts (x, y). 
 * UCA Sweep (lower:step:upper). [deg]
