@@ -11,9 +11,10 @@ sla_params = yaml.loadFile(param_file_name);
 
 % Spingle measurement
 spindle_length = sla_params.uprights.spindle_length;
-
+                                                                                        
 % LCA mount, length and angle of operation
-% LCA mount is the origin and ride height is equal to a horizontal LCA
+% LCA mount is the origin and ride heig
+% ht is equal to a horizontal LCA
 lca_mount = [sla_params.lca.mount{1}, sla_params.lca.mount{2}];
 lca_length = sla_params.lca.length;
 lca_phi = deg2rad((sla_params.lca.phi{1}:sla_params.lca.phi{2}:sla_params.lca.phi{3}));
@@ -152,7 +153,7 @@ function camber = calculate_camber(matched_points)
 end
 
 function rh_uca_phi = find_rh_uca_phi(rh_lca_phi, lca_length, uca_phi_trans, uca_r_trans, spindle_length, uca_mount)
-
+    rh_uca_phi = NaN;
     for i = 1:length(uca_phi_trans)
         r_1 = lca_length;
         r_2 = uca_r_trans(i);
@@ -162,11 +163,11 @@ function rh_uca_phi = find_rh_uca_phi(rh_lca_phi, lca_length, uca_phi_trans, uca
         
         % Conditional to check if the UCA sweep point and LCA sweep
         % point are within a tolerance of the spindle length
-        if abs(dist - spindle_length) <= 0.001
+        if abs(dist - spindle_length) <= 0.01
             % Convert to cartesian for later calculation
             [uca_x, uca_y] = pol2cart(uca_phi_trans(i), uca_r_trans(i));
             rh_uca_phi = rad2deg(atan2(abs(uca_mount(2) - uca_y), abs(uca_mount(1) - uca_x)));
         end
     end
-    if 
+    rh_uca_phi
 end

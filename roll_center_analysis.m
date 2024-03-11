@@ -33,24 +33,24 @@ passenger_lca_mount = [-subframe_width/2 + sla_params.lca.mount{1}, sla_params.l
 passenger_uca_mount = [-subframe_width/2 - sla_params.uca.mount{1}, sla_params.uca.mount{2}];
 
 
+% Plotting of the LCA, UCA, and Splindle
 [driver_lca_end, driver_uca_end, passenger_lca_end, passenger_uca_end, wheel_mounts, upright_phi] = plot_suspension(sla_params, ...
     driver_lca_mount, driver_uca_mount, passenger_lca_mount, passenger_uca_mount, lca_length, uca_length, hub_ride_height);
 
-inst_roll_center(driver_lca_mount, driver_lca_end, driver_uca_mount, driver_uca_end, "driver"); 
-inst_roll_center(passenger_lca_mount, passenger_lca_end, passenger_uca_mount, passenger_uca_end, "passenger");
-
-create_wheel_tire_array(wheel_width, wheel_backspace, tire_width, tire_radius, wheel_mounts, upright_phi)
-
+% Plotting of the virtual arms of the LCA, UCA. Calculate the IC of the given side 
+driver_ic = inst_roll_center(driver_lca_mount, driver_lca_end, driver_uca_mount, driver_uca_end, "driver"); 
+passenger_ic = inst_roll_center(passenger_lca_mount, passenger_lca_end, passenger_uca_mount, passenger_uca_end, "passenger");
 
 
+tire_points = create_wheel_tire_array(wheel_width, wheel_backspace, tire_width, tire_radius, wheel_mounts, upright_phi);
 
-
-
-
-
+% Plot the roll center and the virtual lever arm on which it acts
+roll_center_plot(driver_ic, passenger_ic, tire_points);
 
 function instant_roll_center = inst_roll_center(lca_mount, lca_end, uca_mount, uca_end, side)
-
+    
+    % Changes the range depenging on the driver vs passenger side
+    % configuration
     if side == "driver"
         x_lca = -60:0.01:lca_end(1);
         x_uca = -60:0.01:uca_end(1);
@@ -59,7 +59,7 @@ function instant_roll_center = inst_roll_center(lca_mount, lca_end, uca_mount, u
         x_uca = uca_end(1):0.01:60;
     end
 
-
+    % Plotting of the LCA virtual lines
     linewidth = 1.5;
     lca_x_in = lca_mount(1);
     lca_y_in = lca_mount(2);
@@ -78,13 +78,24 @@ function instant_roll_center = inst_roll_center(lca_mount, lca_end, uca_mount, u
     y_uca = polyval(uca_coef, x_uca);
     plot(x_uca, y_uca, ':k', LineWidth = linewidth);
     hold on
-
+    
+    % Plotting the center line for finding the roll center
     xline(0);
     hold on
 
     title("Ride Height Instantaneous Roll Centers")
+    
 
+    % Finding the point for the instant roll center accounting for slight
+    % numerical errors due to lack of resolution
     instant_roll_center = [0, 0];
+    for i = 1:length(y_uca)
+        if abs(y_uca(i)) < 0.001
+            instant_roll_center(1) = x_uca(i);
+            instant_roll_center(2) = y_uca(i);
+        end
+    end
+
 end
 
 
@@ -156,9 +167,7 @@ function [driver_lca_end, driver_uca_end, passenger_lca_end, passenger_uca_end, 
 
 end 
 
-function create_wheel_tire_array(wheel_width, wheel_backspace, tire_width, tire_radius, wheel_mounts, upright_phi)
-
-%     wheel_mounts = [[driver_lca_end_x + hub_x, driver_lca_end_y + hub_y], [passenger_lca_end_x - hub_x, passenger_lca_end_y + hub_y]];
+function tire_points = create_wheel_tire_array(wheel_width, wheel_backspace, tire_width, tire_radius, wheel_mounts, upright_phi)
     
     % Find the components of change of the wheel due to camber
     d_y_wheel = tire_radius * sin(upright_phi);    
@@ -183,17 +192,27 @@ function create_wheel_tire_array(wheel_width, wheel_backspace, tire_width, tire_
     driver_tire_out = [driver_wheel_bottom(1) - d_x_tire + offset, driver_wheel_bottom(2) + d_y_tire];
     passenger_tire_in = [passenger_wheel_bottom(1) + d_x_tire - offset, passenger_wheel_bottom(2) + d_y_tire];
     passenger_tire_out = [passenger_wheel_bottom(1) - d_x_tire - offset, passenger_wheel_bottom(2) - d_y_tire];
+    tire_points = [driver_tire_in, driver_tire_out, passenger_tire_in, passenger_tire_out];
 
-    plot([driver_wheel_top(1), driver_wheel_bottom(1)], [driver_wheel_top(2), driver_wheel_bottom(2)]);
-    hold on;
-    plot([driver_tire_in(1), driver_tire_out(1)], [driver_tire_in(2), driver_tire_out(2)]);
-    hold on;
 
-    plot([passenger_wheel_top(1), passenger_wheel_bottom(1)], [driver_wheel_top(2), passenger_wheel_bottom(2)]);
+    linewidth = 1.75;
+    plot([driver_wheel_top(1), driver_wheel_bottom(1)], [driver_wheel_top(2), driver_wheel_bottom(2)], 'k', LineWidth = linewidth);
     hold on;
-    plot([passenger_tire_in(1), passenger_tire_out(1)], [passenger_tire_in(2), passenger_tire_out(2)]);
+    plot([driver_tire_in(1), driver_tire_out(1)], [driver_tire_in(2), driver_tire_out(2)], 'r', LineWidth = linewidth);
     hold on;
 
+    plot([passenger_wheel_top(1), passenger_wheel_bottom(1)], [driver_wheel_top(2), passenger_wheel_bottom(2)], 'k', LineWidth = linewidth);
+    hold on;
+    plot([passenger_tire_in(1), passenger_tire_out(1)], [passenger_tire_in(2), passenger_tire_out(2)], 'r', LineWidth = linewidth);
+    hold on;
 
+end
 
+function roll_center_plot(driver_ic, passenger_ic, tire_points)
+    tire_points
+    linewidth = 5;
+    plot(driver_ic(1), driver_ic(2), '*k', LineWidth = linewidth);
+    hold on;
+    plot(passenger_ic(1), passenger_ic(2), '*k', LineWidth = linewidth);
+    hold on;
 end

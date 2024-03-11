@@ -11,9 +11,10 @@ sla_params = yaml.loadFile(param_file_name);
 
 % Spingle measurement
 spindle_length = sla_params.uprights.spindle_length;
-
+                                                                                        
 % LCA mount, length and angle of operation
-% LCA mount is the origin and ride height is equal to a horizontal LCA
+% LCA mount is the origin and ride heig
+% ht is equal to a horizontal LCA
 lca_mount = [sla_params.lca.mount{1}, sla_params.lca.mount{2}];
 lca_length = sla_params.lca.length;
 lca_phi = deg2rad((sla_params.lca.phi{1}:sla_params.lca.phi{2}:sla_params.lca.phi{3}));
@@ -168,5 +169,4 @@ function rh_uca_phi = find_rh_uca_phi(rh_lca_phi, lca_length, uca_phi_trans, uca
             rh_uca_phi = rad2deg(atan2(abs(uca_mount(2) - uca_y), abs(uca_mount(1) - uca_x)));
         end
     end
-    rh_uca_phi
 end
