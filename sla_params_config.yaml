@@ -8,11 +8,11 @@ uca:
   length: 8.95
   phi: [-30.0, 0.05, 30.0]
 uprights: {spindle_length: 7.0, hub_center_from_lca: 2.5}
-wheel: {radius: 8.5, width: 9.0, back_space: 6.0}
+wheel: {radius: 8.5, width: 9.0, back_space: 7.0}
 tire: {width: 9.0, ratio: 45.0}
 ride_height: {lca_phi: 0.0, uca_phi: 6.45}
 roll_center:
-  front: [0.002456779482135938, -5.638380467346384]
+  front: [0.00238812419658355, -5.7327835970247705]
   rear: null
 camber:
   front:

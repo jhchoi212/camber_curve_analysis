@@ -135,27 +135,35 @@ function [driver_lca_end, driver_uca_end, passenger_lca_end, passenger_uca_end, 
 
     % Plot LCA (driver)
     plot([driver_lca_mount(1), driver_lca_end_x], [driver_lca_mount(2), driver_lca_end_y], 'b', LineWidth = 2)
+    hold on;
 
     % Plot UCA (driver)
     plot([driver_uca_mount(1), driver_uca_end_x], [driver_uca_mount(2), driver_uca_end_y], 'r', LineWidth = 2)
+    hold on;
 
     % Plot Upright (driver)
-    plot([driver_lca_end_x, driver_uca_end_x], [driver_lca_end_y, driver_uca_end_y], 'k', LineWidth = 2)
+    plot([driver_lca_end_x, driver_uca_end_x], [driver_lca_end_y, driver_uca_end_y], 'k', LineWidth = 5)
+    hold on;
 
     % Plot wheel center (driver)
     plot(wheel_mounts(1), wheel_mounts(2), "*k", LineWidth = 3)
+    hold on;
 
     % Plot LCA (passenger)
     plot([passenger_lca_mount(1), passenger_lca_end_x], [passenger_lca_mount(2), passenger_lca_end_y], 'b', LineWidth = 2)
+    hold on;
 
     % Plot UCA (passenger)
     plot([passenger_uca_mount(1), passenger_uca_end_x], [passenger_uca_mount(2), passenger_uca_end_y], 'r', LineWidth = 2)
+    hold on;
 
     % Plot Upright (passenger)
-    plot([passenger_lca_end_x, passenger_uca_end_x], [passenger_lca_end_y, passenger_uca_end_y], 'k', LineWidth = 2)
+    plot([passenger_lca_end_x, passenger_uca_end_x], [passenger_lca_end_y, passenger_uca_end_y], 'k', LineWidth = 5)
+    hold on;
 
     % Plot wheel center (passenger)
     plot(wheel_mounts(3), wheel_mounts(4), "*k", LineWidth = 3)
+    hold on;
 
     xlim([passenger_lca_end_x - 10, driver_lca_end_x + 10]);
     ylim([passenger_lca_end_x - 10, driver_lca_end_x + 10]);
