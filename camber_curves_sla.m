@@ -3,13 +3,14 @@
 % Given the mounting points of the lower control arm (lca), upper control arm (uca), lengths of the lca and uca, 
 % and the spindle length, we can determine the camber curves for Short Long Arm Suspension
 
-clear; clf; echo off;
+clear; clf; echo off; close all;
 
 % Load in the Params
 param_file_name = "sla_params_config.yaml";
 sla_params = yaml.loadFile(param_file_name);
 
 % Spingle measurement
+
 spindle_length = sla_params.uprights.spindle_length;
                                                                                         
 % LCA mount, length and angle of operation

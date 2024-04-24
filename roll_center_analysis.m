@@ -3,7 +3,7 @@
 % Given the mounting points of the lower control arm (lca), upper control arm (uca), lengths of the lca and uca, 
 % and the spindle length, distance between left lca and right lca mounts,
 % we can determine the roll center of a vehicle
-clear; clf;
+clear; clf; close all;
 
 % Load in the Params
 param_file_name = "sla_params_config.yaml";
