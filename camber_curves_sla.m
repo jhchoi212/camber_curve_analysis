@@ -92,6 +92,7 @@ function matched_points = camber_curve(lca_mount, lca_length, lca_phi, rh_lca_ph
     title_subplot = sprintf(formatSpec, lca_length, lca_mount(1), lca_mount(2), uca_length, uca_mount(1), uca_mount(2), spindle_length);
     sgtitle(title_subplot);
 
+    
     % Save matched points and camber data to yaml file for further analysis
     yaml.dumpFile(param_file_name, sla_params);
 
