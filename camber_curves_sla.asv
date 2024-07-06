@@ -67,23 +67,19 @@ uca_full = deg2rad((0:0.1:360));
 % Find the Matching points in the LCA sweep and UCA sweep such that the
 % distance between them is <= 0.001 inches
 matched_points = ca_distance(lca_phi, lca_length, uca_phi_trans, uca_r_trans, spindle_length);
+if location == "Frront"
+sla_params.camber.front.matched_points = matched_points;
 
 % Using the matched points, calculate the camber change and ride height
 % deviation
 camber = calculate_camber(matched_points);
+sla_params.camber.front.camber_data = camber;
 
 % Find UCA Ride height angle for later calculations
 rh_uca_phi = find_rh_uca_phi(rh_lca_phi, lca_length, uca_phi_trans, uca_r_trans, spindle_length, uca_mount);
+sla_params.ride_height.uca_phi = rh_uca_phi;
 
-if location == "Front"
-    sla_params.camber.front.matched_points = matched_points;
-    sla_params.camber.front.camber_data = camber;
-    sla_params.front.ride_height.uca_phi = rh_uca_phi;
-else
-    sla_params.camber.rear.matched_points = matched_points;
-    sla_params.camber.rear.camber_data = camber;
-    sla_params.rear.ride_height.uca_phi = rh_uca_phi;
-end
+
 
 pos1 = [0.1 0.3 0.4 0.46];
 subplot('Position',pos1);
@@ -101,7 +97,7 @@ subplot('Position',pos2);
 polarplot(lca_phi, lca_length*ones(1, length(lca_phi)), LineWidth=5, Color="r");
 hold on
 polarplot(lca_full, lca_length*ones(1, length(lca_full)), ':', LineWidth=1.5, Color=[255/256 165/256 0]);
-% hold on
+hold on
 polarplot(uca_phi_trans, uca_r_trans, LineWidth=5, Color="b");
 hold on
 polarplot(uca_phi_trans_full, uca_r_trans_full, ':', LineWidth=1.5, Color=[92/256 191/256 240/256]);
@@ -111,10 +107,11 @@ hold on
 polarplot(uca_mount_polar_phi, uca_mount_polar_rho, '*', LineWidth = 5, Color = 'b');
 hold on
 
-formatSpec = 'Location: %s. LCA [Length, Mount]:[%d, (%d, %d)]. UCA [Length, Mount]:[%d, (%d, %d)]. Spindle: %d';
+formatSpec = 'LCA [Length, Mount]:[%d, (%d, %d)]. UCA [Length, Mount]:[%d, (%d, %d)]. Spindle: %d';
 lca_mount(1);
-title_subplot = sprintf(formatSpec, location, lca_length, lca_mount(1), lca_mount(2), uca_length, uca_mount(1), uca_mount(2), spindle_length);
+title_subplot = sprintf(formatSpec, lca_length, lca_mount(1), lca_mount(2), uca_length, uca_mount(1), uca_mount(2), spindle_length);
 sgtitle(title_subplot);
+
 
 % Save matched points and camber data to yaml file for further analysis
 yaml.dumpFile(param_file_name, sla_params);

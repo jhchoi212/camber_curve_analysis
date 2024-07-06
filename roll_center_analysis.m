@@ -3,7 +3,7 @@
 % Given the mounting points of the lower control arm (lca), upper control arm (uca), lengths of the lca and uca, 
 % and the spindle length, distance between left lca and right lca mounts,
 % we can determine the roll center of a vehicle
-clear; clf; close all;
+clear; clf;
 
 % Load in the Params
 param_file_name = "sla_params_config.yaml";
@@ -52,11 +52,11 @@ function instant_roll_center = inst_roll_center(lca_mount, lca_end, uca_mount, u
     % Changes the range depenging on the driver vs passenger side
     % configuration
     if side == "driver"
-        x_lca = -60:0.01:lca_end(1);
-        x_uca = -60:0.01:uca_end(1);
+        x_lca = -150:0.01:lca_end(1);
+        x_uca = -150:0.01:uca_end(1);
     else
-        x_lca = lca_end(1):0.01:60;
-        x_uca = uca_end(1):0.01:60;
+        x_lca = lca_end(1):0.01:150;
+        x_uca = uca_end(1):0.01:150;
     end
 
     % Plotting of the LCA virtual lines
